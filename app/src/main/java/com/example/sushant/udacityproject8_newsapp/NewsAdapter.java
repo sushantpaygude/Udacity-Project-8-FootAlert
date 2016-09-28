@@ -26,9 +26,9 @@ public class NewsAdapter extends ArrayAdapter<NewsInfo> {
         super(context, resource);
     }
 
-    List<NewsInfo> cardList=new ArrayList<NewsInfo>();
+    List<NewsInfo> cardList = new ArrayList<NewsInfo>();
 
-    static class CardViewHolder{
+    static class CardViewHolder {
         ImageView newsThumbnailView;
         TextView newsTitleView;
         TextView newsURLView;
@@ -54,33 +54,28 @@ public class NewsAdapter extends ArrayAdapter<NewsInfo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View row=convertView;
+        View row = convertView;
         CardViewHolder cardViewHolder;
-        if(row==null)
-        {
-            LayoutInflater layoutInflater=(LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row=layoutInflater.inflate(R.layout.list_item_card,parent,false);
-            cardViewHolder=new CardViewHolder();
-            cardViewHolder.newsTitleView=(TextView)row.findViewById(R.id.news_title);
-            cardViewHolder.newsThumbnailView=(ImageView)row.findViewById(R.id.news_thumbnail);
-            cardViewHolder.newsAuthorView=(TextView)row.findViewById(R.id.news_author);
+        if (row == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = layoutInflater.inflate(R.layout.list_item_card, parent, false);
+            cardViewHolder = new CardViewHolder();
+            cardViewHolder.newsTitleView = (TextView) row.findViewById(R.id.news_title);
+            cardViewHolder.newsThumbnailView = (ImageView) row.findViewById(R.id.news_thumbnail);
+            cardViewHolder.newsAuthorView = (TextView) row.findViewById(R.id.news_author);
             row.setTag(cardViewHolder);
-        }
-        else{
-            cardViewHolder=(CardViewHolder)row.getTag();
+        } else {
+            cardViewHolder = (CardViewHolder) row.getTag();
         }
 
-        NewsInfo newsInfo=getItem(position);
+        NewsInfo newsInfo = getItem(position);
         cardViewHolder.newsTitleView.setText(newsInfo.getNewsTitle());
         cardViewHolder.newsAuthorView.setText(newsInfo.getNewsAuthor());
         new LoadImageTask(cardViewHolder.newsThumbnailView).execute(newsInfo.getNewsThumbnail());
-
         return row;
-
     }
 
-    public void setNews(ArrayList<NewsInfo> newsData)
-    {
+    public void setNews(ArrayList<NewsInfo> newsData) {
         cardList.addAll(newsData);
         notifyDataSetChanged();
     }

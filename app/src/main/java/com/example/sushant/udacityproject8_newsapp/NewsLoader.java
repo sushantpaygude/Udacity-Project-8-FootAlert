@@ -23,9 +23,8 @@ import java.util.List;
  * Created by sushant on 14/9/16.
  */
 
-public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
-{
-    public String NEWS_REQUEST_URL="http://content.guardianapis.com/search?q=football&api-key=test&show-fields=thumbnail&section=football&order-by=newest&show-tags=contributor";
+public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>> {
+    public String NEWS_REQUEST_URL = "http://content.guardianapis.com/search?q=football&api-key=test&show-fields=thumbnail&section=football&order-by=newest&show-tags=contributor";
 
     public NewsLoader(Context context) {
         super(context);
@@ -33,38 +32,37 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
 
     @Override
     public ArrayList<NewsInfo> loadInBackground() {
-        ArrayList<NewsInfo> newsInfoList=new ArrayList<>();
-        URL url=createURLObject(NEWS_REQUEST_URL);
+        ArrayList<NewsInfo> newsInfoList = new ArrayList<>();
+        URL url = createURLObject(NEWS_REQUEST_URL);
         try {
-            String jsonResponse=makeHTTPRequest(url);
+            String jsonResponse = makeHTTPRequest(url);
 
-            newsInfoList=extractNews(jsonResponse);
+            newsInfoList = extractNews(jsonResponse);
+        } catch (Exception e) {
+            Log.e("", "" + e);
         }
-        catch (Exception e)
-        {Log.e("",""+e);}
 
         return newsInfoList;
     }
 
-    private URL createURLObject(String stringURL)
-    {
-        URL url=null;
+    private URL createURLObject(String stringURL) {
+        URL url = null;
         try {
-            url=new URL(stringURL);
+            url = new URL(stringURL);
+        } catch (MalformedURLException exception) {
+            Log.e("Error with URL:", "" + exception);
         }
-        catch (MalformedURLException exception){
-            Log.e("Error with URL:",""+exception);
-        }
-        Log.e("","URL OBJECT CREATED");
+        Log.e("", "URL OBJECT CREATED");
 
         return url;
     }
-    private String makeHTTPRequest(URL url)throws IOException{
-        String jsonResponse=null;
-        InputStream inputStream=null;
-        HttpURLConnection urlConnection=null;
 
-        try{
+    private String makeHTTPRequest(URL url) throws IOException {
+        String jsonResponse = null;
+        InputStream inputStream = null;
+        HttpURLConnection urlConnection = null;
+
+        try {
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -73,11 +71,9 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
             urlConnection.connect();
             inputStream = urlConnection.getInputStream();
             jsonResponse = readFromStream(inputStream);
-        }
-        catch (IOException e){
-            Log.e("URL Connection Failed:",""+e);
-        }
-        finally {
+        } catch (IOException e) {
+            Log.e("URL Connection Failed:", "" + e);
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -86,65 +82,54 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
                 inputStream.close();
             }
         }
-        Log.e("","HTTP REQUEST MADE");
+        Log.e("", "HTTP REQUEST MADE");
 
-        return  jsonResponse;
+        return jsonResponse;
     }
-    private String readFromStream(InputStream inputStream)throws IOException
-    {
-        StringBuilder streamOutput=new StringBuilder();
-        if(inputStream!=null)
-        {
-            InputStreamReader inputStreamReader=new InputStreamReader(inputStream);
-            BufferedReader bufferedReader=new BufferedReader(inputStreamReader);
-            String line=bufferedReader.readLine();
-            while (line!=null)
-            {
+
+    private String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder streamOutput = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line = bufferedReader.readLine();
+            while (line != null) {
                 streamOutput.append(line);
-                line=bufferedReader.readLine();
+                line = bufferedReader.readLine();
             }
         }
-
-        return  streamOutput.toString();
-
+        return streamOutput.toString();
     }
 
-    private ArrayList<NewsInfo> extractNews(String jsonResponse)
-    {
-        ArrayList<NewsInfo> newsInfoArrayList=new ArrayList<NewsInfo>();
+    private ArrayList<NewsInfo> extractNews(String jsonResponse) {
+        ArrayList<NewsInfo> newsInfoArrayList = new ArrayList<NewsInfo>();
 
         try {
-            JSONObject rootObject=new JSONObject(jsonResponse);
-            JSONObject responseObject=rootObject.getJSONObject("response");
-            JSONArray resultsArray=responseObject.getJSONArray("results");
+            JSONObject rootObject = new JSONObject(jsonResponse);
+            JSONObject responseObject = rootObject.getJSONObject("response");
+            JSONArray resultsArray = responseObject.getJSONArray("results");
 
-            if(resultsArray.length()>0)
-            {
-                for(int i=0;i<resultsArray.length();i++) {
+            if (resultsArray.length() > 0) {
+                for (int i = 0; i < resultsArray.length(); i++) {
                     JSONObject articleObject = resultsArray.getJSONObject(i);
                     String newsTitle = articleObject.optString("webTitle");
                     String newsURL = articleObject.optString("webUrl");
 
                     JSONObject fieldsObject = articleObject.getJSONObject("fields");
                     String newsThumbnail = fieldsObject.optString("thumbnail");
-                    JSONArray tagsArray=articleObject.getJSONArray("tags");
-                    String newsAuthor=null;
-                    if(tagsArray.length()>0) {
-                        JSONObject authorObject=tagsArray.getJSONObject(0);
-                        newsAuthor=authorObject.optString("webTitle");
+                    JSONArray tagsArray = articleObject.getJSONArray("tags");
+                    String newsAuthor = null;
+                    if (tagsArray.length() > 0) {
+                        JSONObject authorObject = tagsArray.getJSONObject(0);
+                        newsAuthor = authorObject.optString("webTitle");
                     }
-                    Log.e("NEWSAUTHOR","IS:"+newsAuthor);
-                    NewsInfo newsInfo = new NewsInfo(newsTitle, newsThumbnail, newsURL,newsAuthor);
+                    NewsInfo newsInfo = new NewsInfo(newsTitle, newsThumbnail, newsURL, newsAuthor);
                     newsInfoArrayList.add(newsInfo);
                 }
             }
+        } catch (Exception e) {
+            Log.e("JSON ERROR:", "" + e);
         }
-        catch (Exception e)
-        {
-        Log.e("JSON ERROR:",""+e);
-        }
-
-
         return newsInfoArrayList;
     }
 

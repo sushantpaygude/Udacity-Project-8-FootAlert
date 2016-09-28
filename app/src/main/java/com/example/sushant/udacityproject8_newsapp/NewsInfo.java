@@ -8,11 +8,12 @@ public class NewsInfo {
     public String newsThumbnail;
     public String newsURL;
     public String newsAuthor;
+
     public NewsInfo(String newsTitle, String newsThumbnail, String newsURL, String newsAuthor) {
         this.newsTitle = newsTitle;
         this.newsThumbnail = newsThumbnail;
         this.newsURL = newsURL;
-        this.newsAuthor=newsAuthor;
+        this.newsAuthor = newsAuthor;
     }
 
     public String getNewsAuthor() {
