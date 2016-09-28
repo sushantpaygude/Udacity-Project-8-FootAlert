@@ -37,6 +37,15 @@
                     android:id="@+id/news_title"
                     android:textStyle="bold"
                     android:textColor="@color/colorText"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/news_author"
+                    android:textColor="@color/colorText"
+                    android:text="Author"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="2dp"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -32,6 +32,7 @@ public class NewsAdapter extends ArrayAdapter<NewsInfo> {
         ImageView newsThumbnailView;
         TextView newsTitleView;
         TextView newsURLView;
+        TextView newsAuthorView;
 
     }
 
@@ -62,6 +63,7 @@ public class NewsAdapter extends ArrayAdapter<NewsInfo> {
             cardViewHolder=new CardViewHolder();
             cardViewHolder.newsTitleView=(TextView)row.findViewById(R.id.news_title);
             cardViewHolder.newsThumbnailView=(ImageView)row.findViewById(R.id.news_thumbnail);
+            cardViewHolder.newsAuthorView=(TextView)row.findViewById(R.id.news_author);
             row.setTag(cardViewHolder);
         }
         else{
@@ -70,6 +72,7 @@ public class NewsAdapter extends ArrayAdapter<NewsInfo> {
 
         NewsInfo newsInfo=getItem(position);
         cardViewHolder.newsTitleView.setText(newsInfo.getNewsTitle());
+        cardViewHolder.newsAuthorView.setText(newsInfo.getNewsAuthor());
         new LoadImageTask(cardViewHolder.newsThumbnailView).execute(newsInfo.getNewsThumbnail());
 
         return row;

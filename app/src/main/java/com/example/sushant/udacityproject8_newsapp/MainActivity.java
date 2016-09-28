@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NewsInfo newsInfo=newsInfoArrayList.get(position);
        String selectedURL=newsInfo.getNewsURL().toString();
         Log.e("NEWS","CLICKED"+selectedURL);
-        Toast.makeText(getApplicationContext(),"CLICKED",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Loading...",Toast.LENGTH_SHORT).show();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selectedURL));
         startActivity(browserIntent);
     }

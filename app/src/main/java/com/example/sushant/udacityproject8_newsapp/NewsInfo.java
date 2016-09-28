@@ -7,11 +7,16 @@ public class NewsInfo {
     public String newsTitle;
     public String newsThumbnail;
     public String newsURL;
-
-    public NewsInfo(String newsTitle, String newsThumbnail, String newsURL) {
+    public String newsAuthor;
+    public NewsInfo(String newsTitle, String newsThumbnail, String newsURL, String newsAuthor) {
         this.newsTitle = newsTitle;
         this.newsThumbnail = newsThumbnail;
         this.newsURL = newsURL;
+        this.newsAuthor=newsAuthor;
+    }
+
+    public String getNewsAuthor() {
+        return newsAuthor;
     }
 
     public String getNewsTitle() {

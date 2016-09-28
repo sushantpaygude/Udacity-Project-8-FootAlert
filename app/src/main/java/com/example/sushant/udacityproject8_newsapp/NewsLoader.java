@@ -25,7 +25,7 @@ import java.util.List;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
 {
-    public String NEWS_REQUEST_URL="http://content.guardianapis.com/search?q=football&api-key=test&show-fields=thumbnail&section=football&order-by=newest";
+    public String NEWS_REQUEST_URL="http://content.guardianapis.com/search?q=football&api-key=test&show-fields=thumbnail&section=football&order-by=newest&show-tags=contributor";
 
     public NewsLoader(Context context) {
         super(context);
@@ -127,7 +127,14 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<NewsInfo>>
 
                     JSONObject fieldsObject = articleObject.getJSONObject("fields");
                     String newsThumbnail = fieldsObject.optString("thumbnail");
-                    NewsInfo newsInfo = new NewsInfo(newsTitle, newsThumbnail, newsURL);
+                    JSONArray tagsArray=articleObject.getJSONArray("tags");
+                    String newsAuthor=null;
+                    if(tagsArray.length()>0) {
+                        JSONObject authorObject=tagsArray.getJSONObject(0);
+                        newsAuthor=authorObject.optString("webTitle");
+                    }
+                    Log.e("NEWSAUTHOR","IS:"+newsAuthor);
+                    NewsInfo newsInfo = new NewsInfo(newsTitle, newsThumbnail, newsURL,newsAuthor);
                     newsInfoArrayList.add(newsInfo);
                 }
             }
